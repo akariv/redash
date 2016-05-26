@@ -93,8 +93,12 @@ def login(org_slug=None):
             return redirect(url_for("remote_user_auth.login", next=next_path))
         elif settings.SAML_LOGIN_ENABLED:
             return redirect(url_for("saml_auth.sp_initiated", next=next_path))
-        else:
-            return redirect(url_for("google_oauth.authorize", next=next_path))
+        elif settings.JWT_LOGIN_ENABLED:
+            jwt = [ part[4:] for part in next_path.split('?') if part.startswith('jwt=') ]
+            if len(jwt) > 0:
+                jwt = jwt[0]
+                return redirect(url_for("jwt_auth.login", next=next_path, jwt=jwt))
+        return redirect(url_for("google_oauth.authorize", next=next_path))
 
     if request.method == 'POST':
         try:

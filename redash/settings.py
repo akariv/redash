@@ -116,6 +116,8 @@ SAML_CALLBACK_SERVER_NAME = os.environ.get("REDASH_SAML_CALLBACK_SERVER_NAME", "
 # login page to trigger remote user auth.
 REMOTE_USER_LOGIN_ENABLED = parse_boolean(os.environ.get("REDASH_REMOTE_USER_LOGIN_ENABLED", "false"))
 REMOTE_USER_HEADER = os.environ.get("REDASH_REMOTE_USER_HEADER", "X-Forwarded-Remote-User")
+JWT_LOGIN_ENABLED = parse_boolean(os.environ.get("REDASH_JWT_LOGIN_ENABLED", "false"))
+JWT_AUTH_SERVER = os.environ.get("REDASH_JWT_AUTH_SERVER")
 
 # Usually it will be a single path, but we allow to specify additional ones to override the default assets. Only the
 # last one will be used for Flask templates.
@@ -139,6 +141,8 @@ MAIL_MAX_EMAILS = os.environ.get('REDASH_MAIL_MAX_EMAILS', None)
 MAIL_ASCII_ATTACHMENTS = parse_boolean(os.environ.get('REDASH_MAIL_ASCII_ATTACHMENTS', 'false'))
 
 HOST = os.environ.get('REDASH_HOST', '')
+SERVER_NAME = os.environ.get('REDASH_SERVER_NAME')
+DEBUG = True
 
 HIPCHAT_API_TOKEN = os.environ.get('REDASH_HIPCHAT_API_TOKEN', None)
 HIPCHAT_API_URL = os.environ.get('REDASH_HIPCHAT_API_URL', None)
