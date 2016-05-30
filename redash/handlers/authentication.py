@@ -1,4 +1,5 @@
 import logging
+import urlparse
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_user, logout_user
 
@@ -94,10 +95,11 @@ def login(org_slug=None):
         elif settings.SAML_LOGIN_ENABLED:
             return redirect(url_for("saml_auth.sp_initiated", next=next_path))
         elif settings.JWT_LOGIN_ENABLED:
-            jwt = [ part[4:] for part in next_path.split('?') if part.startswith('jwt=') ]
-            if len(jwt) > 0:
-                jwt = jwt[0]
-                return redirect(url_for("jwt_auth.login", next=next_path, jwt=jwt))
+            next_qs = urlparse.urlparse(next_path).query
+            if next_qs:
+                jwt = urlparse.parse_qs(next_qs).get('jwt')
+                if jwt is not None:
+                    return redirect(url_for("jwt_auth.login", next=next_path, jwt=jwt))
         return redirect(url_for("google_oauth.authorize", next=next_path))
 
     if request.method == 'POST':

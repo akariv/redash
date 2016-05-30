@@ -111,6 +111,12 @@
     $scope.$on('$destroy', function destroy() {
       KeyboardShortcuts.unbind(shortcuts);
     });
+
+    if (isNewQuery && $location.search().queryText) {
+      queryText = $location.search().queryText;
+      $scope.query.query = queryText;
+      $scope.executeQuery();
+    }
   }
 
   angular.module('redash.controllers').controller('QuerySourceCtrl', [

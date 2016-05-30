@@ -60,22 +60,32 @@
       //$scope.canExecuteQuery = $scope.canExecuteQuery && _.some(dataSources, function(ds) { return !ds.view_only });
       $scope.canCreateQuery = _.any(dataSources, function(ds) { return !ds.view_only });
 
-      updateSchema();
+      updateSchema($location.search().focusedTable);
     }
 
 
     $scope.dataSource = {};
     $scope.query = $route.current.locals.query;
 
-    var updateSchema = function() {
+    var updateSchema = function(selectedTableName) {
       $scope.hasSchema = false;
       $scope.editorSize = "col-md-12";
       DataSource.getSchema({id: $scope.query.data_source_id}, function(data) {
         if (data && data.length > 0) {
           $scope.schema = data;
-          _.each(data, function(table) {
-            table.collapsed = true;
+          var selectedIndex;
+          _.each(data, function(table, i) {
+            var isSelected = table.name === selectedTableName;
+            if (isSelected) {
+              selectedIndex = i;
+            }
+            table.collapsed = !isSelected;
           });
+          if (selectedIndex) {
+            var selectedTable = data[selectedIndex];
+            data.splice(selectedIndex, 1);
+            data.unshift(selectedTable);
+          }
 
           $scope.editorSize = "col-md-9";
           $scope.hasSchema = true;
