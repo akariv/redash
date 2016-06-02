@@ -20,7 +20,7 @@ celery_schedule = {
     },
     'refresh_schemas': {
         'task': 'redash.tasks.refresh_schemas',
-        'schedule': timedelta(minutes=30)
+        'schedule': timedelta(seconds=30)
     }
 }
 
